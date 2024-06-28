@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ModelLayer.Enum
 {
-    public enum AccountStatus
-    {
-        Active,  
-        InActive
+    //public enum AccountStatus
+    //{
+    //    Active,  
+    //    InActive
 
-    }
+    //}
 }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using ModelLayer.Models;
 
-namespace ModelLayer.Models
+namespace DataAccessLayer
 {
     public partial class WebCoustemClothingContext : DbContext
     {
@@ -29,8 +27,7 @@ namespace ModelLayer.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(local);Database=WebCoustemClothing;Uid=sa;Password=123456;Trusted_Connection=true;TrustServerCertificate=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=LAPTOP-SQSO74P2\\DUYHOANG;Database=WebCoustemClothing;User =sa;Password=123456;Trusted_Connection=true;TrustServerCertificate=True;MultipleActiveResultSets=true");
             }
         }
 

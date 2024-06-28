@@ -21,6 +21,6 @@ namespace ModelLayer.Models
 
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
-        public object Status { get; set; }
+        //public object Status { get; set; }
     }
 }

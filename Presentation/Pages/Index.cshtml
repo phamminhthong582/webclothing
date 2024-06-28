@@ -4,7 +4,47 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Accounts</title>
+</head>
+<body>
+    <h1>Accounts</h1>
+    <p>
+        <a href="/Create">Create New</a>
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Account ID</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Create Day</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in Model.Accounts)
+            {
+                <tr>
+                    <td>@account.AccountId</td>
+                    <td>@account.UserName</td>
+                    <td>@account.Email</td>
+                    <td>@account.Address</td>
+                    <td>@account.PhoneNumber</td>
+                    <td>@account.CreateDay</td>
+                </tr>
+            <td>
+                <a href="/Edit?id=@account.AccountId">Edit</a> |
+                <a href="/Delete?id=@account.AccountId">Delete</a>
+            </td>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+

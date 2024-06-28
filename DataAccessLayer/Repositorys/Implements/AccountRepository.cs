@@ -16,51 +16,76 @@ namespace DataAccessLayer.Repositorys.Implements
     public class AccountRepository : IAccountRepository
     {
         private readonly WebCoustemClothingContext _context;
-        protected readonly DbSet<Account> _accounts;
-        
-        public async Task<Account> CreateAccount(Account userAccount)
-        {   
-            await _context.Accounts.AddAsync(userAccount);
-            _context.SaveChanges();
-            return userAccount;
+        public AccountRepository(WebCoustemClothingContext context)
+        {
+            _context = context;
         }
-
+        public async Task<List<Account>> GetAllAccountAsync()
+        {
+            return await _context.Accounts.ToListAsync();
+        }
+        public async Task<AccountRespone> GetAccountById(int id)
+        {
+            var acc =  await _context.Accounts.FirstOrDefaultAsync(a =>a.AccountId == id);
+            if(acc != null)
+            {
+                return new AccountRespone
+                {
+                    AccountId = acc.AccountId,
+                    Email = acc.Email,
+                    Password = acc.Password,
+                    UserName = acc.UserName,
+                    PhoneNumber = acc.PhoneNumber,
+                    Address = acc.Address,
+                    CreateDay = acc.CreateDay,
+                };   
+            }
+            return null;
+        }
+        public async Task<Account> CreateAccount(CreateAccountRequest userAccount)
+        {
+            var acc = new Account
+            {
+                Email = userAccount.Email,
+                Password = userAccount.Password,
+                UserName = userAccount.UserName,
+                PhoneNumber = userAccount.PhoneNumber,
+                Address = userAccount.Address,
+                CreateDay = userAccount.CreateDay,
+            };
+            await _context.Accounts.AddAsync(acc);
+            await _context.SaveChangesAsync();
+            return acc;
+        }
+        public async Task<Account> UpdateAccount(UpdateAccountRequest request)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == request.AccountId);
+            if (account != null)
+            {
+                account.Address = request.Address;
+                account.UserName = request.UserName;
+                account.PhoneNumber = request.PhoneNumber;
+                await _context.SaveChangesAsync();
+            }
+            return account;
+        }
         public async Task DeleteAccountAsync(int id)
         {
             var account = await _context.Accounts.FindAsync(id);
-            account.Status = AccountStatus.InActive.ToString();
-            await _context.SaveChangesAsync();
+            if (account != null)
+            {
+                _context.Accounts.Remove(account);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Account> GetAccountByEmail(string email)
         {
-            return await _context.Set<Account>().FirstOrDefaultAsync(c => c.Email.ToLower().Equals(email.ToLower()));
+            return await _context.Accounts.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
         }
-
-        public async Task<AccountRespone> GetAccountById(int id)
-        {
-            var acc = await _accounts.Select(c => new AccountRespone
-            {
-                AccountId = c.AccountId,
-                Email = c.Email,
-                Address = c.Address,
-            }).FirstOrDefaultAsync();
-            return acc;
-        }
-
         public Task<string> GetAdminAccount(string email, string password)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<List<Account>> GetAllAccountAsync()
-        {
-            return await _context.Accounts.Include(c => c.AccountId).ToListAsync();
-        }
-
-        public Task<Account> UpdateAccount(UpdateAccountRequest request)
-        {
-            throw new NotImplementedException();
-        }
+        }  
     }
 }
