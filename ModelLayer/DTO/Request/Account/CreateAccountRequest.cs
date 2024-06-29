@@ -13,6 +13,5 @@ namespace ModelLayer.DTO.Request.Account
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
         public string? UserName { get; set; }
-        public DateTime? CreateDay { get; set; }
     }
 }

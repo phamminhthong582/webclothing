@@ -42,7 +42,7 @@ namespace DataAccessLayer.Repositorys.Implements
             }
             return null;
         }
-        public async Task<Account> CreateAccount(CreateAccountRequest userAccount)
+        public async Task<AccountRespone> CreateAccount(CreateAccountRequest userAccount)
         {
             var acc = new Account
             {
@@ -51,13 +51,25 @@ namespace DataAccessLayer.Repositorys.Implements
                 UserName = userAccount.UserName,
                 PhoneNumber = userAccount.PhoneNumber,
                 Address = userAccount.Address,
-                CreateDay = userAccount.CreateDay,
+                CreateDay = DateTime.Now,
             };
             await _context.Accounts.AddAsync(acc);
             await _context.SaveChangesAsync();
-            return acc;
+            var respone = new AccountRespone
+            {
+                AccountId = acc.AccountId,
+                Email = acc.Email,
+                Password = acc.Password,
+                UserName = acc.UserName,
+                PhoneNumber = acc.PhoneNumber,
+                Address = acc.Address,
+                CreateDay = DateTime.Now,
+
+            };  
+            return respone;
         }
-        public async Task<Account> UpdateAccount(UpdateAccountRequest request)
+
+        public async Task<AccountRespone> UpdateAccount(UpdateAccountRequest request)
         {
             var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == request.AccountId);
             if (account != null)
@@ -65,9 +77,20 @@ namespace DataAccessLayer.Repositorys.Implements
                 account.Address = request.Address;
                 account.UserName = request.UserName;
                 account.PhoneNumber = request.PhoneNumber;
+            } 
                 await _context.SaveChangesAsync();
-            }
-            return account;
+                var respone = new AccountRespone
+                {
+                    AccountId = account.AccountId,
+                    Email = account.Email,
+                    Password = account.Password,
+                    UserName = account.UserName,
+                    PhoneNumber = account.PhoneNumber,
+                    Address = account.Address,
+                    CreateDay = DateTime.Now,
+
+                };
+                return respone;
         }
         public async Task DeleteAccountAsync(int id)
         {

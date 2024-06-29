@@ -13,8 +13,8 @@ namespace DataAccessLayer.Repositorys
     {
         Task<List<Account>>GetAllAccountAsync();
         Task<AccountRespone>GetAccountById(int id);
-        Task<Account> CreateAccount(CreateAccountRequest userAccount);
-        Task<Account>UpdateAccount(UpdateAccountRequest request);
+        Task<AccountRespone> CreateAccount(CreateAccountRequest userAccount);
+        Task<AccountRespone>UpdateAccount(UpdateAccountRequest request);
         Task DeleteAccountAsync(int id);
         Task<Account> GetAccountByEmail(string email);
         Task<string> GetAdminAccount(string email, string password);
