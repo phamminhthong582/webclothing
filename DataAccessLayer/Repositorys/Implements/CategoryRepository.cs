@@ -48,17 +48,9 @@ namespace DataAccessLayer.Repositorys.Implements
             return cate;
         }
 
-        //public Task<Category> UpdateCategory(Category request)
+        //public async Task<Category> UpdateCategory(Category request)
         //{
-        //    var  = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == request.AccountId);
-        //    if (account != null)
-        //    {
-        //        account.Address = request.Address;
-        //        account.UserName = request.UserName;
-        //        account.PhoneNumber = request.PhoneNumber;
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return account;
+        //    return await _context.Categories.ToListAsync();
         //}
     }
 }
