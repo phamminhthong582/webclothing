@@ -1,4 +1,6 @@
-﻿using ModelLayer.DTO.Response.Account;
+﻿using ModelLayer.DTO.Request.Category;
+using ModelLayer.DTO.Response.Account;
+using ModelLayer.DTO.Response.Category;
 using ModelLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,9 @@ namespace DataAccessLayer.Repositorys
     public interface ICategoryRepository
     {
         Task<List<Category>> GetAllCategoryAsync();
-        Task<Category> GetCategoryById(int id);
-        Task<Category> CreateCategory(Category userAccount);
-
-        Task<Category> UpdateCategory(Category request);
+        Task<CategoryRespone> GetCategoryById(int id);
+        Task<CategoryRespone> CreateCategory(CreateCategoryRequest request);
+        Task<CategoryRespone> UpdateCategory(UpdateCategoryRequest request);      
         Task DeleteCategoryAsync(int id);
        
     }

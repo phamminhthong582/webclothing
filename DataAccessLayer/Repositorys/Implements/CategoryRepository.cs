@@ -1,21 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
+using ModelLayer.DTO.Request.Category;
+using ModelLayer.DTO.Response.Account;
+using ModelLayer.DTO.Response.Category;
 using ModelLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositorys.Implements
 {
-    public class CategoryRepository  /*ICategoryRepository*/
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly WebCoustemClothingContext _context;
         public CategoryRepository(WebCoustemClothingContext context)
         {
             _context = context;
         }
-        public async Task<Category> CreateCategory(Category Categorys)
+        public async Task<CategoryRespone> CreateCategory(CreateCategoryRequest Categorys)
         {
             var cate = new Category
             {
@@ -24,7 +29,13 @@ namespace DataAccessLayer.Repositorys.Implements
             };
             await _context.Categories.AddAsync(cate);
             await _context.SaveChangesAsync();
-            return cate;
+            var respone = new CategoryRespone
+            {
+                CategoryId = cate.CategoryId,
+                CategoryName = cate.CategoryName,
+                CreateDay = DateTime.Now,
+            };
+            return respone;
         }
 
         public async Task DeleteCategoryAsync(int id)
@@ -42,15 +53,37 @@ namespace DataAccessLayer.Repositorys.Implements
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<Category> GetCategoryById(int id)
+        public async Task<CategoryRespone> GetCategoryById(int id)
         {
            var cate = await _context.Categories.FirstOrDefaultAsync(a => a.CategoryId == id);
-            return cate;
+            if (cate != null)
+            {
+                return new CategoryRespone
+                {
+                   CategoryId= cate.CategoryId,
+                   CategoryName= cate.CategoryName,
+                   CreateDay = cate.CreateDay,
+                };
+            }
+            return null;
         }
 
-        //public async Task<Category> UpdateCategory(Category request)
-        //{
-        //    return await _context.Categories.ToListAsync();
-        //}
+        public async Task<CategoryRespone> UpdateCategory(UpdateCategoryRequest request)
+        {
+            var cate = await _context.Categories.FirstOrDefaultAsync(a => a.CategoryId == request.CategoryId);
+            if (cate != null)
+            {
+                cate.CategoryName = request.CategoryName;
+                cate.CreateDay = request.CreateDay;
+            }
+            await _context.SaveChangesAsync();
+            var respone = new CategoryRespone
+            {
+                CategoryId = cate.CategoryId,
+                CategoryName = cate.CategoryName,
+                CreateDay = DateTime.Now,
+            };
+            return respone;
+        }
     }
 }

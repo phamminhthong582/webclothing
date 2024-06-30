@@ -27,7 +27,7 @@ namespace DataAccessLayer
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=LAPTOP-SQSO74P2\\DUYHOANG;Database=WebCoustemClothing;User =sa;Password=123456;Trusted_Connection=true;TrustServerCertificate=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=(local);Database=WebCoustemClothing;User =sa;Password=123456;Trusted_Connection=true;TrustServerCertificate=True;MultipleActiveResultSets=true");
             }
         }
 
