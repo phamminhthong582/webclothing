@@ -9,19 +9,18 @@ using ModelLayer.Models;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;
-        private readonly WebCoustemClothingContext _context;
-        public AccountController(IAccountRepository accountRepository, WebCoustemClothingContext context)
+        private readonly IAccountRepository _accountRepository;       
+        public AccountController(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
-            _context = context;
+           
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAllAccounts()
+        public async Task<ActionResult<List<AccountRespone>>> GetAllAccounts()
         {
             var accounts = await _accountRepository.GetAllAccountAsync();
             return Ok(accounts);
@@ -33,7 +32,7 @@ namespace WebAPI.Controllers
             return Ok(account);
         }
         [HttpPost]
-        public async Task<ActionResult> CreateAccount(CreateAccountRequest model)
+        public async Task<ActionResult<AccountRespone>> CreateAccount(CreateAccountRequest model)
         {
             try
             {

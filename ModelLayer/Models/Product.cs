@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelLayer.Enum;
+using System;
 using System.Collections.Generic;
 
 namespace ModelLayer.Models
@@ -17,7 +18,7 @@ namespace ModelLayer.Models
         public int? Quantity { get; set; }
         public string? Image { get; set; }
         public string? Desciption { get; set; }
-        public string? Size { get; set; }
+        public  string? Size{ get; set; }
         public string? Color { get; set; }
         public int? CategoryId { get; set; }
         public DateTime? CreateDay { get; set; }

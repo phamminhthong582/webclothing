@@ -1,14 +1,14 @@
-﻿using System;
+﻿using ModelLayer.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelLayer.DTO.Response
+namespace ModelLayer.DTO.Request.Products
 {
-    public class ProductRespone
+    public class CreateProductRequest
     {
-        public int ProductId { get; set; }
         public string? ProductName { get; set; }
         public double? Price { get; set; }
         public int? Quantity { get; set; }
@@ -17,6 +17,5 @@ namespace ModelLayer.DTO.Response
         public string? Size { get; set; }
         public string? Color { get; set; }
         public int? CategoryId { get; set; }
-        public DateTime? CreateDay { get; set; }
     }
 }

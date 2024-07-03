@@ -10,25 +10,25 @@ using ModelLayer.Models;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly WebCoustemClothingContext _context;
-        public CategoryController(ICategoryRepository categoryRepository, WebCoustemClothingContext context)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _context = context;
+            
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetAllCategorys()
         {
             var cate = await _categoryRepository.GetAllCategoryAsync();
-            return cate.ToList();
+            return Ok(cate);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCategory(int id , UpdateCategoryRequest model)
+        public async Task<ActionResult<CategoryRespone>> UpdateCategory(int id , UpdateCategoryRequest model)
         {
             if (id != model.CategoryId)
             {
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> CreateCategory(CreateCategoryRequest model)
+        public async Task<ActionResult<CategoryRespone>> CreateCategory(CreateCategoryRequest model)
         {
             try
             {

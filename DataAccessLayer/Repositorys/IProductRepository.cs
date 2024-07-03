@@ -1,6 +1,8 @@
 ﻿using ModelLayer.DTO.Request.Account;
+using ModelLayer.DTO.Request.Products;
 using ModelLayer.DTO.Response;
 using ModelLayer.DTO.Response.Account;
+using ModelLayer.DTO.Response.Products;
 using ModelLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -14,8 +16,8 @@ namespace DataAccessLayer.Repositorys
     {
         Task<List<ProductRespone>> GetAllProductAsync();
         Task<ProductRespone> GetProductById(int id);
-        Task<Product> CreateProduct(ProductRespone product);
-        Task<Product> UpdateProduct(ProductRespone product);
+        Task<ProductRespone> CreateProduct(CreateProductRequest request);
+        Task<ProductRespone> UpdateProduct(UpdateProductRequest request);
         Task DeleteProductAsync(int id);
     }
 }

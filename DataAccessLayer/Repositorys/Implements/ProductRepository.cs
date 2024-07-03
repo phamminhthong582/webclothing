@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModelLayer.DTO.Request.Products;
 using ModelLayer.DTO.Response;
 using ModelLayer.DTO.Response.Account;
+using ModelLayer.DTO.Response.Products;
 using ModelLayer.Models;
 using System;
 using System.Collections.Generic;
@@ -55,17 +57,70 @@ namespace DataAccessLayer.Repositorys.Implements
             }
             return null;
         }
-        public Task<Product> CreateProduct(ProductRespone product)
+        public async Task<ProductRespone> CreateProduct(CreateProductRequest product)
         {
-            throw new NotImplementedException();
+            var pro = new Product
+            {            
+                ProductName = product.ProductName,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                Image = product.Image,
+                Color = product.Color,
+                Size = product.Size,
+                Desciption = product.Desciption,              
+            }; 
+            pro.CreateDay = DateTime.Now;
+            await _context.Products.AddAsync(pro);
+            await _context.SaveChangesAsync();
+            var respone = new ProductRespone
+            {
+                ProductId = pro.ProductId,
+                ProductName = pro.ProductName,
+                Price = pro.Price,
+                Quantity = pro.Quantity,
+                Image = pro.Image,
+                Color = pro.Color,
+                Size = pro.Size,
+                Desciption = pro.Desciption,
+                CreateDay = DateTime.Now,
+            };
+            return respone;
         }
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var pro = await _context.Products.FindAsync(id);
+            if (pro != null)
+            {
+                _context.Products.Remove(pro);
+                await _context.SaveChangesAsync();
+            }
         }
-        public Task<Product> UpdateProduct(ProductRespone product)
+        public async Task<ProductRespone> UpdateProduct(UpdateProductRequest request)
         {
-            throw new NotImplementedException();
+            var pro = await _context.Products.FirstOrDefaultAsync(a => a.ProductId == request.ProductId);
+            if (pro != null)
+            {
+                pro.ProductName = request.ProductName;
+                pro.Price = request.Price;
+                pro.Quantity = request.Quantity;
+                pro.Image = request.Image;
+                pro.Color = request.Color;
+                pro.Size = request.Size;
+            }
+            await _context.SaveChangesAsync();
+            var respone = new ProductRespone
+            {
+                ProductId = pro.ProductId,
+                ProductName = pro.ProductName,
+                Price = pro.Price,
+                Quantity = pro.Quantity,
+                Image = pro.Image,
+                Color = pro.Color,
+                Size = pro.Size,
+                CategoryId = pro.CategoryId,
+                CreateDay = DateTime.Now,
+            };
+            return respone;
         }
     }
 }
