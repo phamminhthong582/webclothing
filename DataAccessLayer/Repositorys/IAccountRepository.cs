@@ -1,4 +1,5 @@
-﻿using ModelLayer.DTO.Request.Account;
+﻿using ModelLayer.DTO.Pagination;
+using ModelLayer.DTO.Request.Account;
 using ModelLayer.DTO.Response.Account;
 using ModelLayer.Models;
 using System;
@@ -17,6 +18,8 @@ namespace DataAccessLayer.Repositorys
         Task<AccountRespone>UpdateAccount(UpdateAccountRequest request);
         Task DeleteAccountAsync(int id);
         Task<Account> GetAccountByEmail(string email);
-        Task<string> GetAdminAccount(string email, string password);
+        Task<string> GetAdminAccount(string email, string password);   
+        Task <RepoRespone<string>> Login(string email, string password);
+        //Task<Pagination<Account>> ToPagination(int pageindex = 0);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Repositorys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,22 +10,32 @@ using ModelLayer.Models;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;       
+        private readonly IAccountRepository _accountRepository;
+        IConfiguration _config;
         public AccountController(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
            
         }
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<ActionResult<List<AccountRespone>>> GetAccount()
+        {
+          return await _accountRepository.GetAllAccountAsync();
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<AccountRespone>>> GetAllAccounts()
         {
             var accounts = await _accountRepository.GetAllAccountAsync();
             return Ok(accounts);
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<AccountRespone>> GetAccountById(int id)
         {
@@ -44,8 +55,8 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAccount(int id, UpdateAccountRequest model)
+        [HttpPut("{Update}")]
+        public async Task<ActionResult> UpdateAccount(int id, [FromForm] UpdateAccountRequest model)
         {
                 if (id != model.AccountId)
                 {
@@ -61,6 +72,7 @@ namespace WebAPI.Controllers
                     return BadRequest(ex.Message);
                 }
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteAccountAsync(int id)
             {
@@ -74,6 +86,13 @@ namespace WebAPI.Controllers
                     return BadRequest(ex.Message);
                 }
             }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<RepoRespone<string>> Login(LoginAccountRespone lg)
+        {
+            var result = await _accountRepository.Login(lg.Email , lg.Password);
+            return result;
+        }
 
         }
     }

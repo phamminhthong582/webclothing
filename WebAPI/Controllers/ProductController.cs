@@ -6,10 +6,11 @@ using ModelLayer.Models;
 using ModelLayer.DTO.Request.Products;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ModelLayer.DTO.Response.Products;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -19,14 +20,16 @@ namespace WebAPI.Controllers
         {
             _productRepository = productRepository;        
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var pro = await _productRepository.GetAllProductAsync();
             return Ok(pro);
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProduct(int id , UpdateProductRequest model)
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<ActionResult> UpdateProduct(int id , [FromForm] UpdateProductRequest model)
         {
             if (id != model.ProductId)
             {
@@ -42,8 +45,9 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        public async Task<ActionResult> CreateProduct(CreateProductRequest model)
+        [Authorize]
+        [HttpPost("create")]      
+        public async Task<ActionResult> CreateProduct([FromForm] CreateProductRequest model)
         {
             try
             {
@@ -55,13 +59,15 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductRespone>> GetProductById(int id)
         {
             var pro = await _productRepository.GetProductById(id);
             return Ok(pro);
         }
-        [HttpDelete("{id}")]
+        [Authorize]
+        [HttpPost("remove/{id}")]
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
             try

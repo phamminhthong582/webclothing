@@ -1,13 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using ModelLayer.DTO.Pagination;
 using ModelLayer.DTO.Request.Account;
 using ModelLayer.DTO.Response.Account;
 using ModelLayer.Enum;
 using ModelLayer.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,9 +21,13 @@ namespace DataAccessLayer.Repositorys.Implements
     public class AccountRepository : IAccountRepository
     {
         private readonly WebCoustemClothingContext _context;
-        public AccountRepository(WebCoustemClothingContext context)
+        private readonly IConfiguration _configuration;
+        protected readonly DbSet<Account> _dbSet;
+        public AccountRepository(WebCoustemClothingContext context , IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+            _dbSet = _context.Set<Account>();
         }
         public async Task<List<AccountRespone>> GetAllAccountAsync()
         {
@@ -115,9 +124,103 @@ namespace DataAccessLayer.Repositorys.Implements
         {
             return await _context.Accounts.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
         }
-        public Task<string> GetAdminAccount(string email, string password)
+        public async Task<string> GetAdminAccount(string email, string password)
         {
-            throw new NotImplementedException();
-        }  
+            IConfiguration config = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json", true, true)
+               .Build();
+            // Check if the configuration key exists
+            if (config.GetSection("AdminAccount").Exists())
+            {
+                string emailJson = config["AdminAccount:adminemail"];
+                string passwordJson = config["AdminAccount:adminpassword"];
+
+                // Check if both email and password match
+                if (emailJson == email && passwordJson == password)
+                {
+                    return emailJson;
+                }
+            }
+
+            return null;
+        }
+
+        public async Task<RepoRespone<string>> Login(string email, string password)
+        {
+           var respone = new RepoRespone<string>();
+           var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+           var admin = await GetAdminAccount(email , password);   
+            if (user == null && admin == null)
+            {
+                respone.Success = false;
+                respone.Message = "User not found!";
+            }
+            else if (admin != null)
+            {
+                respone.Success = true;
+                respone.Message = "Admin login Successfully";
+                respone.Data = CreateTokenForAdmin(admin);
+            }
+            else if (user.Password != password)
+            {
+                respone.Success = false;
+                respone.Message = "Wrong password!";
+            }           
+            else
+            {
+                respone.Success = true;
+                respone.Message = "Login Successfully";
+                respone.Data = CreateToken(user);
+            }
+
+            return respone;
+        }
+        public string CreateToken(Account ua)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("Id", ua.AccountId.ToString()),
+                new Claim("Username", ua.UserName.ToString()),
+                new Claim(ClaimTypes.Role, "User")
+
+            };          
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["AppSettings:SerectKey"]));
+
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_configuration["Tokens:Issuer"],
+                _configuration["Tokens:Issuer"],
+                claims,
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public string CreateTokenForAdmin(string email)
+    {
+        var claims = new List<Claim>()
+        {
+            new Claim("Email", email, SecurityAlgorithms.HmacSha256),
+            new Claim(ClaimTypes.Role, "Admin")
+        };
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["AppSettings:SerectKey"]));
+
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(_configuration["Tokens:Issuer"],
+            _configuration["Tokens:Issuer"],
+            claims,
+            expires: DateTime.Now.AddHours(3),
+            signingCredentials: credentials);
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+        //public async Task<Pagination<Account>> ToPagination(int pageindex = 0)
+        //{
+        //    var itemCount = await _dbSet.CountAsync();
+        //    var items = await _dbSet
+        //        .Skip(pageindex * 5)
+        //        .Include(c => c)
+        //}
     }
 }

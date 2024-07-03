@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ModelLayer.Enum;
 using ModelLayer.Models;
 
@@ -30,6 +31,14 @@ namespace DataAccessLayer
             {
                 optionsBuilder.UseSqlServer("Server=(local);Database=WebCoustemClothing;User =sa;Password=123456;Trusted_Connection=true;TrustServerCertificate=True;MultipleActiveResultSets=true");
             }
+        }
+        private string GetConnectionStrings()
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .Build();
+            return config.GetConnectionString("DefaultDB");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
