@@ -20,9 +20,18 @@ namespace DataAccessLayer.Repositorys.Implements
         {
             _context = context;
         }
-        public async Task<List<Account>> GetAllAccountAsync()
+        public async Task<List<AccountRespone>> GetAllAccountAsync()
         {
-            return await _context.Accounts.ToListAsync();
+            return await _context.Accounts.Select(c => new AccountRespone
+            {
+                AccountId = c.AccountId,
+                Address = c.Address,
+                CreateDay = c.CreateDay,
+                Email = c.Email,
+                Password = c.Password,
+                PhoneNumber = c.PhoneNumber,
+                UserName = c.UserName
+            }).AsNoTracking().ToListAsync();
         }
         public async Task<AccountRespone> GetAccountById(int id)
         {

@@ -11,7 +11,7 @@ namespace DataAccessLayer.Repositorys
 {
     public interface IAccountRepository
     {
-        Task<List<Account>>GetAllAccountAsync();
+        Task<List<AccountRespone>>GetAllAccountAsync();
         Task<AccountRespone>GetAccountById(int id);
         Task<AccountRespone> CreateAccount(CreateAccountRequest userAccount);
         Task<AccountRespone>UpdateAccount(UpdateAccountRequest request);

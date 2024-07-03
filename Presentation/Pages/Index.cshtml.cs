@@ -20,7 +20,7 @@ namespace Presentation.Pages
         public async Task OnGetAsync()
         {
             var client = _clientFactory.CreateClient("API");
-            var response = await client.GetAsync("/api/Account"); 
+            var response = await client.GetAsync("/api/Account/GetAllAccounts"); 
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
