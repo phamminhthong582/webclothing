@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
             return Ok(pro);
         }
         [Authorize]
-        [HttpPost("remove/{id}")]
+        [HttpDelete("remove/{id}")]
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
             try

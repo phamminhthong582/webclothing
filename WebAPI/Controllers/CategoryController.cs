@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly WebCoustemClothingContext _context;
+        
         public CategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
