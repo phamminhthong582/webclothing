@@ -14,8 +14,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        private readonly WebCoustemClothingContext _context;
+        private readonly IProductRepository _productRepository;       
         public ProductController(IProductRepository productRepository)
         {
             _productRepository = productRepository;        

@@ -7,9 +7,10 @@ using ModelLayer.DTO.Request.Order;
 using ModelLayer.DTO.Response.Order;
 using ModelLayer.Models;
 
+
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -65,7 +66,7 @@ namespace WebAPI.Controllers
         }
         [Authorize]
         [HttpDelete("remove/{id}")]
-        public async Task<IActionResult> DeleteOrderÁsync(int id)
+        public async Task<IActionResult> DeleteOrderAsync(int id)
         {
             try
             {
@@ -77,7 +78,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrderByAccountId(int accountId)
         {
             var order = await _orderRepository.GetOrderByAccountId(accountId);

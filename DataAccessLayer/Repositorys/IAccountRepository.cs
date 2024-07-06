@@ -20,6 +20,6 @@ namespace DataAccessLayer.Repositorys
         Task<Account> GetAccountByEmail(string email);
         Task<string> GetAdminAccount(string email, string password);   
         Task <RepoRespone<string>> Login(string email, string password);
-        //Task<Pagination<Account>> ToPagination(int pageindex = 0);
+        Task<Pagination<Account>> GetAllAccountPagination(int pageindex = 0);
     }
 }

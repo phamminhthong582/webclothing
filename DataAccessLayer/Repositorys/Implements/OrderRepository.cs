@@ -19,12 +19,7 @@ namespace DataAccessLayer.Repositorys.Implements
         {
             _context = context;
             _orderDetailRepository = orderDetailRepository;
-        }
-
-        public Task AddOrderAsync(Order order)
-        {
-            throw new NotImplementedException();
-        }
+        }     
 
         public async Task<OrderRespone> CreateOrder(CreateOrder request)
         {

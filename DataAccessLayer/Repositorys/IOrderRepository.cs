@@ -13,8 +13,7 @@ namespace DataAccessLayer.Repositorys
     {
         Task<OrderRespone> CreateOrder(CreateOrder request);
         Task<List<Order>> GetAllOrderAsync();
-        Task<OrderRespone> GetOrderById (int id);
-        Task AddOrderAsync(Order order);
+        Task<OrderRespone> GetOrderById(int id);        
         Task DeleteOrderAsync(int id);
         Task<OrderRespone> UpdateOrder(UpdateOrder request);
         Task<Order> GetOrderByAccountId(int accountId);

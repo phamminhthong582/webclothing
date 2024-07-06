@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ModelLayer.DTO.Pagination;
 using ModelLayer.DTO.Request.Account;
 using ModelLayer.DTO.Response.Account;
 using ModelLayer.Models;
@@ -27,6 +28,12 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<List<AccountRespone>>> GetAccount()
         {
           return await _accountRepository.GetAllAccountAsync();
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{pageIndex}")]
+        public async Task<ActionResult<Pagination<Account>>> GetAccountPagination(int pageIndex = 0)
+        {
+            return await _accountRepository.GetAllAccountPagination(pageIndex);
         }
 
         [HttpGet]
@@ -88,11 +95,12 @@ namespace WebAPI.Controllers
             }
         [AllowAnonymous]
         [HttpPost]
-        public async Task<RepoRespone<string>> Login(LoginAccountRespone lg)
+        public async Task<RepoRespone<string>> Login([FromForm] LoginAccountRespone lg)
         {
             var result = await _accountRepository.Login(lg.Email , lg.Password);
             return result;
         }
+
 
         }
     }

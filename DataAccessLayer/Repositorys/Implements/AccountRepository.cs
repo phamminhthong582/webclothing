@@ -215,12 +215,25 @@ namespace DataAccessLayer.Repositorys.Implements
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-        //public async Task<Pagination<Account>> ToPagination(int pageindex = 0)
-        //{
-        //    var itemCount = await _dbSet.CountAsync();
-        //    var items = await _dbSet
-        //        .Skip(pageindex * 5)
-        //        .Include(c => c)
-        //}
+        public async Task<Pagination<Account>> GetAllAccountPagination(int pageindex = 0)
+        {
+            var itemCount = await _dbSet.CountAsync();
+            var items = await _dbSet
+                .Skip(pageindex * 5)
+                .Include(c => c.AccountId).Include(c => c.Address)
+                .Include(c => c.Email)
+                .Take(5)
+                .AsNoTracking()
+                .ToListAsync();
+            var result = new Pagination<Account>()
+            {
+                PageIndex = pageindex,
+                PageSize = 5,
+                TotalItemCount = itemCount,
+                Items = items,
+            };
+
+            return result;
+        }
     }
 }
