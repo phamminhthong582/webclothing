@@ -44,7 +44,7 @@ namespace Presentation.Pages
                     {
                         HttpContext.Session.SetString("SerectKey", result.Data);
                         HttpContext.Session.SetString("Role", "Admin");
-                        return RedirectToPage("/Admin/Index");
+                        return RedirectToPage("/Index");
                     }
                 }
                 else
