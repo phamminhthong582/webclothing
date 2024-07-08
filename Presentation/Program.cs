@@ -38,7 +38,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapGet("/", c =>
     {
-        c.Response.Redirect("/LoginPage");
+        c.Response.Redirect("/Product");
         return Task.CompletedTask;
     });
 });
