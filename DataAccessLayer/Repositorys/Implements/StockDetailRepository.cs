@@ -64,8 +64,8 @@ namespace DataAccessLayer.Repositorys.Implements
                 ProductName = request.ProductName,
                 Quantity = request.Quantity,
                 Price = request.Price,
-                Total = request.Total
-            };
+                Total = request.Price * request.Quantity
+        };
 
             await _context.StockDetails.AddAsync(stockDetail);
             await _context.SaveChangesAsync();
@@ -92,7 +92,7 @@ namespace DataAccessLayer.Repositorys.Implements
                 stockDetail.ProductName = request.ProductName;
                 stockDetail.Quantity = request.Quantity;
                 stockDetail.Price = request.Price;
-                stockDetail.Total = request.Total;
+                stockDetail.Total = request.Price * request.Quantity;
 
                 await _context.SaveChangesAsync();
 
