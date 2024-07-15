@@ -19,14 +19,14 @@ namespace WebAPI.Controllers
         {
             _productRepository = productRepository;        
         }
-        [AllowAnonymous]
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var pro = await _productRepository.GetAllProductAsync();
             return Ok(pro);
         }
-        [Authorize]
+        
         [HttpPut("update")]
         public async Task<ActionResult> UpdateProduct(int id , [FromForm] UpdateProductRequest model)
         {
@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [Authorize]
+        
         [HttpPost("create")]      
         public async Task<ActionResult> CreateProduct([FromForm] CreateProductRequest model)
         {
@@ -58,14 +58,14 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [AllowAnonymous]
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductRespone>> GetProductById(int id)
         {
             var pro = await _productRepository.GetProductById(id);
             return Ok(pro);
         }
-        [Authorize]
+        
         [HttpDelete("remove/{id}")]
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
