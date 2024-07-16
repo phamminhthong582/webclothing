@@ -20,7 +20,7 @@ namespace Presentation.Pages
         }
         public List<ProductRespone> Products { get; set; }
         [BindProperty]
-        public Product Product { get; set; }
+        public ModelLayer.Models.Product  Product { get; set; }
 
         public async Task OnGetAsync()
         {

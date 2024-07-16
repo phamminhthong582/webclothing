@@ -9,11 +9,13 @@ var configuration = new ConfigurationBuilder()
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient("API", client =>
 {
+
+
     client.BaseAddress = new Uri("https://localhost:7075"); 
 });
 var app = builder.Build();
-app.UseDefaultFiles();
-app.UseStaticFiles();
+/*app.UseDefaultFiles();
+app.UseStaticFiles();*/
 
 
 
