@@ -23,6 +23,14 @@ namespace Presentation.Pages
         [BindProperty] public CreateAccountRequest createAccountRequest { get; set; }
         public async Task<IActionResult> OnPostLogin()
         {
+            string adminEmail = _configuration["AdminAccount:adminemail"];
+            string adminPassword = _configuration["AdminAccount:adminpassword"];
+
+            if (adminEmail == accountRespone.Email && adminPassword == accountRespone.Password)
+            {
+                HttpContext.Session.SetString("Role", "Admin");
+                return RedirectToPage("/AdminProduct");
+            }
 
             var json = JsonSerializer.Serialize(accountRespone);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -33,19 +41,9 @@ namespace Presentation.Pages
                 var result = JsonConvert.DeserializeObject<RepoRespone<string>>(data);
                 if (result.Data != null)
                 {
-                    var checkRole = GetRoleFromJwt(result.Data);
-                    if (checkRole == "User")
-                    {
                         HttpContext.Session.SetString("SerectKey", result.Data);                       
                         HttpContext.Session.SetString("Role", "User");                     
                         return RedirectToPage("/Product/Index");
-                    }
-                    else if (checkRole == "Admin")
-                    {
-                        HttpContext.Session.SetString("SerectKey", result.Data);
-                        HttpContext.Session.SetString("Role", "Admin");
-                        return RedirectToPage("/AdminProduct");
-                    }
                 }
                 else
                 {
