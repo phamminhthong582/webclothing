@@ -49,6 +49,8 @@ namespace WebAPI.Controllers
             var account = await _accountRepository.GetAccountById(id);
             return Ok(account);
         }
+        
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<AccountRespone>> CreateAccount(CreateAccountRequest model)
         {

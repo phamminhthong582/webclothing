@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ModelLayer.DTO.Response.Products;
 
-namespace BusinessLogicLayer
+namespace DataAccessLayer
 {
     public class MappingProfile : Profile
     {
@@ -31,6 +32,10 @@ namespace BusinessLogicLayer
             .ForMember(c => c.UserName, opt => opt.MapFrom(a => a.UserName))        
             .ForMember(c => c.Email, opt => opt.MapFrom(a => a.Email))
             .ForMember(c => c.Password, opt => opt.MapFrom(a => a.Password));
+            
+            CreateMap<Product, ProductRespone>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : string.Empty))
+                .ReverseMap();
         }
     }
 }

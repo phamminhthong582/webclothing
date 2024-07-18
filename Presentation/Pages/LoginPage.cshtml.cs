@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
 using ModelLayer.DTO.Request.Account;
@@ -38,13 +38,13 @@ namespace Presentation.Pages
                     {
                         HttpContext.Session.SetString("SerectKey", result.Data);                       
                         HttpContext.Session.SetString("Role", "User");                     
-                        return RedirectToPage("/HomePage");
+                        return RedirectToPage("/Product/Index");
                     }
                     else if (checkRole == "Admin")
                     {
                         HttpContext.Session.SetString("SerectKey", result.Data);
                         HttpContext.Session.SetString("Role", "Admin");
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/AdminProduct");
                     }
                 }
                 else

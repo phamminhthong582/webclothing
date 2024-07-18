@@ -2,10 +2,10 @@ using DataAccessLayer.Repositorys.Implements;
 using DataAccessLayer.Repositorys;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
-using ModelLayer.Models;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using DataAccessLayer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -24,6 +24,7 @@ builder.Services.AddScoped<IOrderRepository,  OrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IStockDetailRepository, StockDetailRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder
     .Services.AddControllers()
     .AddJsonOptions(x => { x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });

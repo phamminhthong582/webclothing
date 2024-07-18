@@ -19,5 +19,6 @@ namespace DataAccessLayer.Repositorys
         Task<ProductRespone> CreateProduct(CreateProductRequest request);
         Task<ProductRespone> UpdateProduct(UpdateProductRequest request);
         Task DeleteProductAsync(int id);
+        public Task<List<ProductRespone>> FilterProducts(FilterProduct filter);
     }
 }
