@@ -7,6 +7,7 @@ builder.Configuration
     .Build();
 
 // Add services to the container
+builder.Services.AddSession();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient("API", client =>
 {
@@ -22,9 +23,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthorization();
 

@@ -23,15 +23,6 @@ namespace Presentation.Pages
         [BindProperty] public CreateAccountRequest createAccountRequest { get; set; }
         public async Task<IActionResult> OnPostLogin()
         {
-            string adminEmail = _configuration["AdminAccount:adminemail"];
-            string adminPassword = _configuration["AdminAccount:adminpassword"];
-
-            if (adminEmail == accountRespone.Email && adminPassword == accountRespone.Password)
-            {
-                HttpContext.Session.SetString("Role", "Admin");
-                return RedirectToPage("/AdminProduct");
-            }
-
             var json = JsonSerializer.Serialize(accountRespone);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync("https://localhost:7075/api/Account/Login", content);
@@ -41,9 +32,20 @@ namespace Presentation.Pages
                 var result = JsonConvert.DeserializeObject<RepoRespone<string>>(data);
                 if (result.Data != null)
                 {
-                        HttpContext.Session.SetString("SerectKey", result.Data);                       
-                        HttpContext.Session.SetString("Role", "User");                     
-                        return RedirectToPage("/Product/Index");
+                    var role = GetRoleFromJwt(result.Data);
+                    if (role == "Admin")
+                    {
+                        HttpContext.Session.SetString("SerectKey", result.Data);
+                        HttpContext.Session.SetString("Role", "Admin");
+                        return RedirectToPage("/AdminProduct");
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("SerectKey", result.Data);
+                        HttpContext.Session.SetString("Role", "User");
+                        return RedirectToPage("/HomePage");
+                    }
+
                 }
                 else
                 {
