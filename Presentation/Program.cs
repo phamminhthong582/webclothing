@@ -14,8 +14,8 @@ builder.Services.AddHttpClient("API", client =>
     client.BaseAddress = new Uri("https://localhost:7075"); 
 });
 var app = builder.Build();
-/*app.UseDefaultFiles();
-app.UseStaticFiles();*/
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 
 
@@ -40,7 +40,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapGet("/", c =>
     {
-        c.Response.Redirect("/Product");
+        c.Response.Redirect("/Homes");
         return Task.CompletedTask;
     });
 });
