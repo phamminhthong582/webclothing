@@ -4,10 +4,13 @@ using ModelLayer.DTO.Response;
 using ModelLayer.DTO.Response.Account;
 using ModelLayer.DTO.Response.Products;
 using ModelLayer.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositorys.Implements
@@ -55,6 +58,7 @@ namespace DataAccessLayer.Repositorys.Implements
                     CategoryId = pro.CategoryId,
                 };
             }
+         
             return null;
         }
         public async Task<ProductRespone> CreateProduct(CreateProductRequest product)
