@@ -74,5 +74,23 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("{name}")]
+        public async Task<ActionResult<IEnumerable<Supplier>>> SearchSuppliersByName(string name)
+        {
+            var suppliers = await _supplierRepository.SearchSuppliersByNameAsync(name);
+            return Ok(suppliers);
+        }
+        [HttpGet("phone/{phoneNumber}")]
+        public async Task<ActionResult<IEnumerable<Supplier>>> SearchSuppliersByPhoneNumber(string phoneNumber)
+        {
+            var suppliers = await _supplierRepository.SearchSuppliersByPhoneNumberAsync(phoneNumber);
+            return Ok(suppliers);
+        }
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<Supplier>>> SearchSuppliersByStatus(bool? status)
+        {
+            var suppliers = await _supplierRepository.SearchSuppliersByStatusAsync(status);
+            return Ok(suppliers);
+        }
     }
 }

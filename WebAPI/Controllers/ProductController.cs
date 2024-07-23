@@ -79,5 +79,33 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);  
             }
         }
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ProductRespone>>> SearchProductsByName([FromQuery] string productName)
+        {
+            var products = await _productRepository.SearchProductsByNameAsync(productName);
+            return Ok(products);
+        }
+
+        [HttpGet("by-category/{categoryId}")]
+        public async Task<ActionResult<IEnumerable<ProductRespone>>> GetProductsByCategory(int categoryId)
+        {
+            var products = await _productRepository.GetProductsByCategoryAsync(categoryId);
+            return Ok(products);
+        }
+
+        [HttpGet("sort-by-price")]
+        public async Task<ActionResult<IEnumerable<ProductRespone>>> GetProductsSortedByPrice([FromQuery] bool sort)
+        {
+            var products = await _productRepository.GetProductsSortedByPriceAsync(sort);
+            return Ok(products);
+        }
+
+        [HttpGet("paged")]
+        public async Task<ActionResult<IEnumerable<ProductRespone>>> GetPagedProducts([FromQuery] int page = 1, [FromQuery] int productinpage = 3)
+        {
+            var products = await _productRepository.GetAllProductAsync();
+            var pagedProducts = await _productRepository.GetPagedProductsAsync(products, page, productinpage);
+            return Ok(pagedProducts);
+        }
     }
 }

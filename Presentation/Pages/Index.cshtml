@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+     Layout = "~/Pages/Shared/_LayoutAdmin.cshtml";
 }
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        @* <tbody>
             @foreach (var account in Model.Accounts)
             {
                 <tr>
@@ -44,7 +44,7 @@
             </td>
             }
         </tbody>
-    </table>
+    </table> *@
 </body>
 </html>
 
