@@ -16,6 +16,8 @@ namespace DataAccessLayer.Repositorys
         Task<SupplierRespone> CreateSupplier(CreateSupplierRequest supplierAccount);
         Task<SupplierRespone> UpdateSupplier(UpdateSupplierRequest request);
         Task DeleteSupplierAsync(int id);
-        
+        Task<List<Supplier>> SearchSuppliersByNameAsync(string supplierName);
+        Task<List<Supplier>> SearchSuppliersByStatusAsync(bool? status);
+        Task<List<Supplier>> SearchSuppliersByPhoneNumberAsync(string phoneNumber);
     }
 }

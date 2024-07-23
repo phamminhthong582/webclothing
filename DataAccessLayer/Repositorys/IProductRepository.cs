@@ -19,5 +19,9 @@ namespace DataAccessLayer.Repositorys
         Task<ProductRespone> CreateProduct(CreateProductRequest request);
         Task<ProductRespone> UpdateProduct(UpdateProductRequest request);
         Task DeleteProductAsync(int id);
+        Task<List<ProductRespone>> SearchProductsByNameAsync(string productName);
+        Task<List<ProductRespone>> GetProductsByCategoryAsync(int categoryId);
+        Task<List<ProductRespone>> GetProductsSortedByPriceAsync(bool sort);
+        Task<List<ProductRespone>> GetPagedProductsAsync(IEnumerable<ProductRespone> products, int page, int productinpage);
     }
 }

@@ -103,5 +103,24 @@ namespace DataAccessLayer.Repositorys.Implements
             };
             return respone;
         }
+        public async Task<List<Supplier>> SearchSuppliersByNameAsync(string supplierName)
+        {
+            supplierName = (supplierName ?? "").ToLower();
+            return await _context.Suppliers.Where(s => 
+                                            s.SupplierName.ToLower().Contains(supplierName))
+                                            .ToListAsync();
+        }
+        public async Task<List<Supplier>> SearchSuppliersByStatusAsync(bool? status)
+        {
+            return await _context.Suppliers
+                .Where(s => s.Active == status || status == null)
+                .ToListAsync();
+        }
+        public async Task<List<Supplier>> SearchSuppliersByPhoneNumberAsync(string phoneNumber)
+        {
+            return await _context.Suppliers
+                .Where(s => s.PhoneNumber.Contains(phoneNumber))
+                .ToListAsync();
+        }
     }
 }
