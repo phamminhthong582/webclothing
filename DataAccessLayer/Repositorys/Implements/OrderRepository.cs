@@ -15,10 +15,13 @@ namespace DataAccessLayer.Repositorys.Implements
     {
         private readonly WebCoustemClothingContext _context;
         private readonly IOrderDetailRepository _orderDetailRepository;
-        public OrderRepository(WebCoustemClothingContext context, IOrderDetailRepository orderDetailRepository)
+        private readonly IEmailRespository _emailRespository;
+
+        public OrderRepository(WebCoustemClothingContext context, IOrderDetailRepository orderDetailRepository, IEmailRespository emailRespository)
         {
             _context = context;
             _orderDetailRepository = orderDetailRepository;
+            _emailRespository = emailRespository;
         }     
 
         public async Task<OrderRespone> CreateOrder(CreateOrder request)
@@ -40,6 +43,12 @@ namespace DataAccessLayer.Repositorys.Implements
                 DateBuy = DateTime.Now,
                 AccountId = order.AccountId,
             };
+
+            var account = await _context.Accounts.FindAsync(respone.AccountId);
+            if (account != null)
+            {
+                await _emailRespository.SendOrderConfirmationEmailAsync(order.OrderId, account.Email);
+            }
             return respone;
         }
 
@@ -99,6 +108,7 @@ namespace DataAccessLayer.Repositorys.Implements
                 PhoneNumber = request.PhoneNumber,
                 DateBuy = DateTime.Now
             };
+            await _emailRespository.SendOrderUpdateEmailAsync(order.OrderId, respone);
             return respone;
         }
     }
