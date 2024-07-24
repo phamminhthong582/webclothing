@@ -12,16 +12,51 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace DataAccessLayer.Repositorys.Implements
 {
     public class ProductRepository : IProductRepository
     {
         private readonly WebCoustemClothingContext _context;
-        public ProductRepository(WebCoustemClothingContext context)
+        private IMapper _mapper;
+        public ProductRepository(WebCoustemClothingContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
+        
+        public async Task<List<ProductRespone>> FilterProducts(FilterProduct filter)
+        {
+            var products = await _context.Products.ToListAsync();
+
+            if (!string.IsNullOrEmpty(filter.ProductName))
+            {
+                products = products.Where(p => p.ProductName.Contains(filter.ProductName)).ToList();
+            }
+
+            if (filter.Price.HasValue)
+            {
+                products = products.Where(p => p.Price == filter.Price).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(filter.Size))
+            {
+                products = products.Where(p => p.Size == filter.Size).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(filter.Color))
+            {
+                products = products.Where(p => p.Color == filter.Color).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(filter.Category))
+            {
+                products = products.Where(p => p.Category != null && p.Category.CategoryName == filter.Category).ToList();
+            }
+            return _mapper.Map<List<ProductRespone>>(products);;
+        }
+        
         public async Task<List<ProductRespone>> GetAllProductAsync()
         {
             var pro = _context.Products.Include(p => p.Category).Select(a => new ProductRespone

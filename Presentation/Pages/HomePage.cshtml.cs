@@ -1,32 +1,32 @@
-using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModelLayer.DTO.Response.Account;
+using Microsoft.Extensions.Logging;
 using ModelLayer.DTO.Response.Products;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using Microsoft.Extensions.Logging;
 
-namespace Presentation.Pages
+namespace Presentation.Pages.Product
 {
-    public class AdminProductModel : PageModel
+    public class HomePage : PageModel
     {
-        private readonly ILogger<AdminProductModel> _logger;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly ILogger<IndexModel> _logger;
 
-        public AdminProductModel(ILogger<AdminProductModel> logger, IHttpClientFactory clientFactory)
+        public HomePage(IHttpClientFactory clientFactory, ILogger<IndexModel> logger)
         {
-            _logger = logger;
             _clientFactory = clientFactory;
+            _logger = logger;
         }
-        
-        public List<ProductRespone> Products { get; set; } = new List<ProductRespone>();
-        
+
+        public IList<ProductRespone> Products { get; set; } = new List<ProductRespone>();
+
         public async Task OnGetAsync()
         {
             var jwtToken = HttpContext.Session.GetString("SerectKey");
             if (string.IsNullOrEmpty(jwtToken))
             {
-                // Handle the case where the JWT token is not found in session
                 _logger.LogWarning("JWT token not found in session.");
                 return;
             }
@@ -38,11 +38,12 @@ namespace Presentation.Pages
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation("Received JSON: " + json);
                 Products = JsonConvert.DeserializeObject<List<ProductRespone>>(json);
+                _logger.LogInformation($"Deserialized Products: {Products.Count} items");
             }
             else
             {
-                // Handle the case where the API call fails
                 _logger.LogError($"Failed to fetch products: {response.ReasonPhrase}");
             }
         }

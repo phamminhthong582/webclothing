@@ -20,6 +20,14 @@ namespace WebAPI.Controllers
             _productRepository = productRepository;        
         }
         
+        
+        [HttpGet]
+        public async Task<ActionResult<List<ProductRespone>>> FilterProduct([FromQuery]FilterProduct filterProduct)
+        {
+            var pro = await _productRepository.FilterProducts(filterProduct);
+            return Ok(pro);
+        }
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {

@@ -30,7 +30,7 @@ namespace DataAccessLayer
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(local);Database=WebCoustemClothing;User =sa;Password=123456;Trusted_Connection=true;TrustServerCertificate=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer(GetConnectionStrings());
             }
         }
         private string GetConnectionStrings()

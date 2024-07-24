@@ -182,7 +182,7 @@ namespace DataAccessLayer.Repositorys.Implements
             {
                 new Claim("Id", ua.AccountId.ToString()),
                 new Claim("Username", ua.UserName.ToString()),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim("Role", "User")
 
             };          
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["AppSettings:SerectKey"]));

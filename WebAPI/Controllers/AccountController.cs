@@ -49,6 +49,8 @@ namespace WebAPI.Controllers
             var account = await _accountRepository.GetAccountById(id);
             return Ok(account);
         }
+        
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<AccountRespone>> CreateAccount(CreateAccountRequest model)
         {
@@ -95,7 +97,7 @@ namespace WebAPI.Controllers
             }
         [AllowAnonymous]
         [HttpPost]
-        public async Task<RepoRespone<string>> Login([FromForm] LoginAccountRespone lg)
+        public async Task<RepoRespone<string>> Login(LoginAccountRespone lg)
         {
             var result = await _accountRepository.Login(lg.Email , lg.Password);
             return result;

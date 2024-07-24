@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
 using ModelLayer.DTO.Request.Account;
@@ -23,7 +23,6 @@ namespace Presentation.Pages
         [BindProperty] public CreateAccountRequest createAccountRequest { get; set; }
         public async Task<IActionResult> OnPostLogin()
         {
-
             var json = JsonSerializer.Serialize(accountRespone);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync("https://localhost:7075/api/Account/Login", content);
@@ -33,19 +32,20 @@ namespace Presentation.Pages
                 var result = JsonConvert.DeserializeObject<RepoRespone<string>>(data);
                 if (result.Data != null)
                 {
-                    var checkRole = GetRoleFromJwt(result.Data);
-                    if (checkRole == "User")
-                    {
-                        HttpContext.Session.SetString("SerectKey", result.Data);                       
-                        HttpContext.Session.SetString("Role", "User");                     
-                        return RedirectToPage("/HomePage");
-                    }
-                    else if (checkRole == "Admin")
+                    var role = GetRoleFromJwt(result.Data);
+                    if (role == "Admin")
                     {
                         HttpContext.Session.SetString("SerectKey", result.Data);
                         HttpContext.Session.SetString("Role", "Admin");
-                        return RedirectToPage("/Index");
+                        return RedirectToPage("/AdminProduct");
                     }
+                    else
+                    {
+                        HttpContext.Session.SetString("SerectKey", result.Data);
+                        HttpContext.Session.SetString("Role", "User");
+                        return RedirectToPage("/HomePage");
+                    }
+
                 }
                 else
                 {
