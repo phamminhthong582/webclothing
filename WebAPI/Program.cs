@@ -24,7 +24,9 @@ builder.Services.AddScoped<IOrderRepository,  OrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IStockDetailRepository, StockDetailRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IEmailRespository, EmailRespository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
 builder
     .Services.AddControllers()
     .AddJsonOptions(x => { x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
