@@ -27,7 +27,7 @@ namespace WebAPI.Controllers
             var pro = await _productRepository.FilterProducts(filterProduct);
             return Ok(pro);
         }
-        
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {

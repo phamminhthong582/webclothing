@@ -28,7 +28,7 @@ namespace DataAccessLayer.Repositorys.Implements
                 AccountId = request.AccountId,
                 Address = request.Address,
                 PhoneNumber = request.PhoneNumber,
-                DateBuy = request.DateBuy,
+                DateBuy = DateTime.Now,
             };
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
